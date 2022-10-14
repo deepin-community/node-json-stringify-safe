@@ -1,0 +1,33 @@
+version=4
+opts=\
+dversionmangle=s/\+(debian|dfsg|ds|deb|repack)(\.\d+)?$//,\
+filenamemangle=s/.*\/v?([\d\.-]+)\.tar\.gz/node-json-stringify-safe-$1.tar.gz/ \
+https://github.com/isaacs/json-stringify-safe/tags .*/archive/v?([\d\.]+).tar.gz
+
+opts=\
+ctype=nodejs,\
+component=must,\
+dversionmangle=auto,\
+filenamemangle=s/.*\/v?([\d\.-]+)\.tar\.gz/node-js-must-$1.tar.gz/ \
+ https://github.com/moll/js-must/tags .*/archive/v?([\d\.]+).tar.gz ignore
+
+opts=\
+ctype=nodejs,\
+component=egal,\
+dversionmangle=auto,\
+filenamemangle=s/.*\/v?([\d\.-]+)\.tar\.gz/node-js-egal-$1.tar.gz/ \
+ https://github.com/moll/js-egal/tags .*/archive/v?([\d\.]+).tar.gz ignore
+
+opts=\
+ctype=nodejs,\
+component=kindof,\
+dversionmangle=auto,\
+filenamemangle=s/.*\/v?([\d\.-]+)\.tar\.gz/node-js-kindof-$1.tar.gz/ \
+ https://github.com/moll/js-kindof/tags .*/archive/v?([\d\.]+).tar.gz ignore
+
+opts=\
+ctype=nodejs,\
+component=oolong,\
+dversionmangle=auto,\
+filenamemangle=s/.*\/v?([\d\.-]+)\.tar\.gz/node-js-oolong-$1.tar.gz/ \
+ https://github.com/moll/js-oolong/tags .*/archive/v?([\d\.]+).tar.gz ignore

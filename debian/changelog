@@ -1,0 +1,68 @@
+node-json-stringify-safe (5.0.1+repack-3) unstable; urgency=medium
+
+  * Team upload
+
+  [ Debian Janitor ]
+  * Set upstream metadata fields: Bug-Submit.
+  * Apply multi-arch hints. + node-json-stringify-safe: Add Multi-Arch: foreign.
+
+  [ Xavier Guimard ]
+  * Bump debhelper compatibility level to 13
+  * Use dh-sequence-nodejs
+  * Declare compliance with policy 4.5.1
+  * Add ctype=nodejs to component(s)
+  * Fix test for recent mocha (Closes: #978317)
+
+ -- Xavier Guimard <yadd@debian.org>  Sun, 27 Dec 2020 08:37:58 +0100
+
+node-json-stringify-safe (5.0.1+repack-2) unstable; urgency=medium
+
+  * Team Upload.
+  * Add in directories which aren't detected by autopkgtest
+  * Bump standards version to 4.5.0
+  * Add dversionmangles to watch
+
+ -- Nilesh Patra <npatra974@gmail.com>  Mon, 09 Mar 2020 00:37:26 +0530
+
+node-json-stringify-safe (5.0.1+repack-1) unstable; urgency=medium
+
+  * Team upload
+  * Bump debhelper compatibility level to 12
+  * Declare compliance with policy 4.4.1
+  * Add "Rules-Requires-Root: no"
+  * Add debian/gbp.conf
+  * Add upstream/metadata
+  * Switch test and install to pkg-js-tools
+  * Replace debian/node_modules/* by components (must, egal, kindof and
+    oolong) and repack
+  * Remove useless debian/links
+  * Update copyright and fix upstream license
+
+ -- Xavier Guimard <yadd@debian.org>  Thu, 14 Nov 2019 19:30:07 +0100
+
+node-json-stringify-safe (5.0.1-1) unstable; urgency=medium
+
+  * Team upload
+  * New upstream version 5.0.1
+  * Bump Standards-Version to 4.2.0 (no changes needed)
+  * Bump debhelper compatibility level to 11
+  * Update Section: javascript, Priority: optional
+  * Embed test dependencies and run tests
+
+ -- Pirate Praveen <praveen@debian.org>  Tue, 21 Aug 2018 12:32:31 +0530
+
+node-json-stringify-safe (5.0.0-1) unstable; urgency=low
+
+  * Upstream update
+  * control:
+    + Standards-Version 3.9.4
+    + Canonicalize Vcs fields
+  * copyright: add Upstream-Contact, Source fields.
+
+ -- Jérémy Lal <kapouer@melix.org>  Wed, 14 Aug 2013 11:38:12 +0200
+
+node-json-stringify-safe (4.0.0-1) unstable; urgency=low
+
+  * Initial release (Closes: #703807)
+
+ -- Jérémy Lal <kapouer@melix.org>  Fri, 22 Mar 2013 14:34:30 +0100

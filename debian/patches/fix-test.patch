@@ -1,0 +1,294 @@
+Description: fix test
+Author: Xavier Guimard <yadd@debian.org>
+Forwarded: not-needed
+Last-Update: 2020-12-27
+
+--- a/test/stringify_test.js
++++ b/test/stringify_test.js
+@@ -1,5 +1,6 @@
+ var Sinon = require("sinon")
+ var stringify = require("..")
++var expect = require('expect.js');
+ function jsonify(obj) { return JSON.stringify(obj, null, 2) }
+ 
+ describe("Stringify", function() {
+@@ -7,43 +8,43 @@
+     var obj = {name: "Alice"}
+     obj.self = obj
+     var json = stringify(obj, null, 2)
+-    json.must.eql(jsonify({name: "Alice", self: "[Circular ~]"}))
++    expect(jsonify({name: "Alice", self: "[Circular ~]"})).to.equal(json);
+   })
+ 
+   it("must stringify circular objects with intermediaries", function() {
+     var obj = {name: "Alice"}
+     obj.identity = {self: obj}
+     var json = stringify(obj, null, 2)
+-    json.must.eql(jsonify({name: "Alice", identity: {self: "[Circular ~]"}}))
++    expect(jsonify({name: "Alice", identity: {self: "[Circular ~]"}})).to.equal(json)
+   })
+ 
+   it("must stringify circular objects deeper", function() {
+     var obj = {name: "Alice", child: {name: "Bob"}}
+     obj.child.self = obj.child
+ 
+-    stringify(obj, null, 2).must.eql(jsonify({
++    expect(jsonify({
+       name: "Alice",
+       child: {name: "Bob", self: "[Circular ~.child]"}
+-    }))
++    })).to.equal(stringify(obj, null, 2))
+   })
+ 
+   it("must stringify circular objects deeper with intermediaries", function() {
+     var obj = {name: "Alice", child: {name: "Bob"}}
+     obj.child.identity = {self: obj.child}
+ 
+-    stringify(obj, null, 2).must.eql(jsonify({
++    expect(jsonify({
+       name: "Alice",
+       child: {name: "Bob", identity: {self: "[Circular ~.child]"}}
+-    }))
++    })).to.equal(stringify(obj, null, 2))
+   })
+ 
+   it("must stringify circular objects in an array", function() {
+     var obj = {name: "Alice"}
+     obj.self = [obj, obj]
+ 
+-    stringify(obj, null, 2).must.eql(jsonify({
++    expect(jsonify({
+       name: "Alice", self: ["[Circular ~]", "[Circular ~]"]
+-    }))
++    })).to.equal(stringify(obj, null, 2))
+   })
+ 
+   it("must stringify circular objects deeper in an array", function() {
+@@ -51,13 +52,13 @@
+     obj.children[0].self = obj.children[0]
+     obj.children[1].self = obj.children[1]
+ 
+-    stringify(obj, null, 2).must.eql(jsonify({
++    expect(jsonify({
+       name: "Alice",
+       children: [
+         {name: "Bob", self: "[Circular ~.children.0]"},
+         {name: "Eve", self: "[Circular ~.children.1]"}
+       ]
+-    }))
++    })).to.equal(stringify(obj, null, 2))
+   })
+ 
+   it("must stringify circular arrays", function() {
+@@ -65,7 +66,7 @@
+     obj.push(obj)
+     obj.push(obj)
+     var json = stringify(obj, null, 2)
+-    json.must.eql(jsonify(["[Circular ~]", "[Circular ~]"]))
++    expect(jsonify(["[Circular ~]", "[Circular ~]"])).to.equal(json)
+   })
+ 
+   it("must stringify circular arrays with intermediaries", function() {
+@@ -73,10 +74,10 @@
+     obj.push({name: "Alice", self: obj})
+     obj.push({name: "Bob", self: obj})
+ 
+-    stringify(obj, null, 2).must.eql(jsonify([
++    expect(jsonify([
+       {name: "Alice", self: "[Circular ~]"},
+       {name: "Bob", self: "[Circular ~]"}
+-    ]))
++    ])).to.equal(stringify(obj, null, 2))
+   })
+ 
+   it("must stringify repeated objects in objects", function() {
+@@ -85,17 +86,17 @@
+     obj.alice1 = alice
+     obj.alice2 = alice
+ 
+-    stringify(obj, null, 2).must.eql(jsonify({
++    expect(jsonify({
+       alice1: {name: "Alice"},
+       alice2: {name: "Alice"}
+-    }))
++    })).to.equal(stringify(obj, null, 2))
+   })
+ 
+   it("must stringify repeated objects in arrays", function() {
+     var alice = {name: "Alice"}
+     var obj = [alice, alice]
+     var json = stringify(obj, null, 2)
+-    json.must.eql(jsonify([{name: "Alice"}, {name: "Alice"}]))
++    expect(jsonify([{name: "Alice"}, {name: "Alice"}])).to.equal(json)
+   })
+ 
+   it("must call given decycler and use its output", function() {
+@@ -105,15 +106,15 @@
+ 
+     var decycle = Sinon.spy(function() { return decycle.callCount })
+     var json = stringify(obj, null, 2, decycle)
+-    json.must.eql(jsonify({a: 1, b: 2}, null, 2))
++    expect(jsonify({a: 1, b: 2}, null, 2)).to.equal(json)
+ 
+-    decycle.callCount.must.equal(2)
+-    decycle.thisValues[0].must.equal(obj)
+-    decycle.args[0][0].must.equal("a")
+-    decycle.args[0][1].must.equal(obj)
+-    decycle.thisValues[1].must.equal(obj)
+-    decycle.args[1][0].must.equal("b")
+-    decycle.args[1][1].must.equal(obj)
++    expect(decycle.callCount).to.equal(2)
++    expect(decycle.thisValues[0]).to.equal(obj)
++    expect(decycle.args[0][0]).to.equal("a")
++    expect(decycle.args[0][1]).to.equal(obj)
++    expect(decycle.thisValues[1]).to.equal(obj)
++    expect(decycle.args[1][0]).to.equal("b")
++    expect(decycle.args[1][1]).to.equal(obj)
+   })
+ 
+   it("must call replacer and use its output", function() {
+@@ -121,20 +122,20 @@
+ 
+     var replacer = Sinon.spy(bangString)
+     var json = stringify(obj, replacer, 2)
+-    json.must.eql(jsonify({name: "Alice!", child: {name: "Bob!"}}))
++    expect(jsonify({name: "Alice!", child: {name: "Bob!"}})).to.equal(json)
+ 
+-    replacer.callCount.must.equal(4)
+-    replacer.args[0][0].must.equal("")
+-    replacer.args[0][1].must.equal(obj)
+-    replacer.thisValues[1].must.equal(obj)
+-    replacer.args[1][0].must.equal("name")
+-    replacer.args[1][1].must.equal("Alice")
+-    replacer.thisValues[2].must.equal(obj)
+-    replacer.args[2][0].must.equal("child")
+-    replacer.args[2][1].must.equal(obj.child)
+-    replacer.thisValues[3].must.equal(obj.child)
+-    replacer.args[3][0].must.equal("name")
+-    replacer.args[3][1].must.equal("Bob")
++    expect(replacer.callCount).to.equal(4)
++    expect(replacer.args[0][0]).to.equal("")
++    expect(replacer.args[0][1]).to.equal(obj)
++    expect(replacer.thisValues[1]).to.equal(obj)
++    expect(replacer.args[1][0]).to.equal("name")
++    expect(replacer.args[1][1]).to.equal("Alice")
++    expect(replacer.thisValues[2]).to.equal(obj)
++    expect(replacer.args[2][0]).to.equal("child")
++    expect(replacer.args[2][1]).to.equal(obj.child)
++    expect(replacer.thisValues[3]).to.equal(obj.child)
++    expect(replacer.args[3][0]).to.equal("name")
++    expect(replacer.args[3][1]).to.equal("Bob")
+   })
+ 
+   it("must call replacer after describing circular references", function() {
+@@ -143,17 +144,17 @@
+ 
+     var replacer = Sinon.spy(bangString)
+     var json = stringify(obj, replacer, 2)
+-    json.must.eql(jsonify({name: "Alice!", self: "[Circular ~]!"}))
++    expect(jsonify({name: "Alice!", self: "[Circular ~]!"})).to.equal(json)
+ 
+-    replacer.callCount.must.equal(3)
+-    replacer.args[0][0].must.equal("")
+-    replacer.args[0][1].must.equal(obj)
+-    replacer.thisValues[1].must.equal(obj)
+-    replacer.args[1][0].must.equal("name")
+-    replacer.args[1][1].must.equal("Alice")
+-    replacer.thisValues[2].must.equal(obj)
+-    replacer.args[2][0].must.equal("self")
+-    replacer.args[2][1].must.equal("[Circular ~]")
++    expect(replacer.callCount).to.equal(3)
++    expect(replacer.args[0][0]).to.equal("")
++    expect(replacer.args[0][1]).to.equal(obj)
++    expect(replacer.thisValues[1]).to.equal(obj)
++    expect(replacer.args[1][0]).to.equal("name")
++    expect(replacer.args[1][1]).to.equal("Alice")
++    expect(replacer.thisValues[2]).to.equal(obj)
++    expect(replacer.args[2][0]).to.equal("self")
++    expect(replacer.args[2][1]).to.equal("[Circular ~]")
+   })
+ 
+   it("must call given decycler and use its output for nested objects",
+@@ -164,13 +165,13 @@
+ 
+     var decycle = Sinon.spy(function() { return decycle.callCount })
+     var json = stringify(obj, null, 2, decycle)
+-    json.must.eql(jsonify({a: 1, b: {self: 2}}))
++    expect(jsonify({a: 1, b: {self: 2}})).to.equal(json)
+ 
+-    decycle.callCount.must.equal(2)
+-    decycle.args[0][0].must.equal("a")
+-    decycle.args[0][1].must.equal(obj)
+-    decycle.args[1][0].must.equal("self")
+-    decycle.args[1][1].must.equal(obj)
++    expect(decycle.callCount).to.equal(2)
++    expect(decycle.args[0][0]).to.equal("a")
++    expect(decycle.args[0][1]).to.equal(obj)
++    expect(decycle.args[1][0]).to.equal("self")
++    expect(decycle.args[1][1]).to.equal(obj)
+   })
+ 
+   it("must use decycler's output when it returned null", function() {
+@@ -179,11 +180,11 @@
+     obj.selves = [obj, obj]
+ 
+     function decycle() { return null }
+-    stringify(obj, null, 2, decycle).must.eql(jsonify({
++    expect(jsonify({
+       a: "b",
+       self: null,
+       selves: [null, null]
+-    }))
++    })).to.equal(stringify(obj, null, 2, decycle))
+   })
+ 
+   it("must use decycler's output when it returned undefined", function() {
+@@ -192,10 +193,10 @@
+     obj.selves = [obj, obj]
+ 
+     function decycle() {}
+-    stringify(obj, null, 2, decycle).must.eql(jsonify({
++    expect(jsonify({
+       a: "b",
+       selves: [null, null]
+-    }))
++    })).to.equal(stringify(obj, null, 2, decycle))
+   })
+ 
+   it("must throw given a decycler that returns a cycle", function() {
+@@ -204,7 +205,7 @@
+     var err
+     function identity(key, value) { return value }
+     try { stringify(obj, null, 2, identity) } catch (ex) { err = ex }
+-    err.must.be.an.instanceof(TypeError)
++    expect(err).to.be.an(TypeError)
+   })
+ 
+   describe(".getSerialize", function() {
+@@ -214,11 +215,11 @@
+       obj.list = [obj, obj]
+ 
+       var json = JSON.stringify(obj, stringify.getSerialize(), 2)
+-      json.must.eql(jsonify({
++      expect(jsonify({
+         "a": "b",
+         "circularRef": "[Circular ~]",
+         "list": ["[Circular ~]", "[Circular ~]"]
+-      }))
++      })).to.equal(json)
+     })
+ 
+     // This is the behavior as of Mar 3, 2015.
+@@ -233,10 +234,10 @@
+       var serializer = stringify.getSerialize()
+ 
+       json = JSON.stringify(obj, serializer, 2)
+-      json.must.eql(jsonify({name: "Alice", self: "[Circular ~]"}))
++      expect(jsonify({name: "Alice", self: "[Circular ~]"})).to.equal(json)
+ 
+       json = JSON.stringify(obj, serializer, 2)
+-      json.must.eql(jsonify({name: "Alice", self: "[Circular ~]"}))
++      expect(jsonify({name: "Alice", self: "[Circular ~]"})).to.equal(json)
+     })
+   })
+ })
