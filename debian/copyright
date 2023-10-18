@@ -17,7 +17,7 @@ License: AGPL-3
 
 Files: debian/*
 Copyright: 2013, Jérémy Lal <kapouer@melix.org>
- 2019, Xavier Guimard <yadd@debian.org>
+ 2019, Yadd <yadd@debian.org>
 License: BSD-2-clause
 
 License: AGPL-3

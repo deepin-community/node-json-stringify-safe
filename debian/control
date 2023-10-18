@@ -5,14 +5,13 @@ Maintainer: Debian Javascript Maintainers <pkg-javascript-devel@lists.alioth.deb
 Uploaders: Jérémy Lal <kapouer@melix.org>
 Testsuite: autopkgtest-pkg-nodejs
 Build-Depends:
- debhelper-compat (= 13),
- nodejs,
- mocha <!nocheck>,
- node-expect.js <!nocheck>,
- node-lodash-packages <!nocheck>,
- node-sinon <!nocheck>,
- dh-sequence-nodejs
-Standards-Version: 4.5.1
+ debhelper-compat (= 13)
+ , dh-sequence-nodejs
+ , mocha <!nocheck>
+ , node-expect.js <!nocheck>
+ , node-lodash-packages <!nocheck>
+ , node-sinon <!nocheck>
+Standards-Version: 4.6.1
 Homepage: https://github.com/isaacs/json-stringify-safe
 Vcs-Git: https://salsa.debian.org/js-team/node-json-stringify-safe.git
 Vcs-Browser: https://salsa.debian.org/js-team/node-json-stringify-safe
@@ -20,9 +19,7 @@ Rules-Requires-Root: no
 
 Package: node-json-stringify-safe
 Architecture: all
-Depends:
- ${misc:Depends}
- , nodejs
+Depends: ${misc:Depends}
 Multi-Arch: foreign
 Description: JSON.stringify with circular references module for Node.js
  node-json-stringify-safe provides a serializer or a wrapper for
